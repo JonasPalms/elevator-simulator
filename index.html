@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="main.js" defer></script>
+    <title>Vite App</title>
+  </head>
+  <body>
+    <main>
+      <div class="container">
+        <section class="building">
+          <div class="floor" data-floor="3">
+            <div class="shaft"></div>
+            <div class="hall">
+              <div class="call-buttons">
+                <button
+                  class="down fa-solid fa-caret-down"
+                  data-direction="down"
+                  data-clicked="false"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="floor" data-floor="2">
+            <div class="shaft"></div>
+            <div class="hall">
+              <div class="call-buttons">
+                <button class="up fa-solid fa-caret-up" data-direction="up" />
+                <button
+                  class="down fa-solid fa-caret-down"
+                  data-direction="down"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="floor" data-floor="1">
+            <div class="shaft"></div>
+            <div class="hall">
+              <div class="call-buttons">
+                <button class="up fa-solid fa-caret-up" data-direction="up" />
+                <button
+                  class="down fa-solid fa-caret-down"
+                  data-direction="down"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="floor" data-floor="0">
+            <div class="shaft"></div>
+            <div class="hall">
+              <div class="call-buttons">
+                <button class="up fa-solid fa-caret-up" data-direction="up" />
+              </div>
+            </div>
+          </div>
+          <div class="elevator" id="elevator">
+            <div class="floor-buttons">
+              <button data-floor="0">0</button>
+              <button data-floor="1">1</button>
+              <button data-floor="2">2</button>
+              <button data-floor="3">3</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

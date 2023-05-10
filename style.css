@@ -1,0 +1,122 @@
+@import url('reset.css');
+
+:root {
+  /* COLORS */
+  --ucla-blue: hsla(202, 66%, 39%, 1);
+  --pearl: rgb(253, 231, 66);
+  --alice-blue: hsla(206, 47%, 94%, 1);
+  --rich-black: hsla(210, 30%, 11%, 1);
+  --cinereous: hsla(21, 14%, 44%, 1);
+
+  /* UTILITIES */
+  --grid-size: 12rem;
+  --border-w: 2px;
+  --current-floor: 0;
+  --elevator-ttf: cubic-bezier(0.5, -0.03, 0.5, 1.02);
+  --elevator-td: 0s;
+}
+
+body {
+  background-color: var(--alice-blue);
+  color: var(--rich-black);
+  font-family: Outfit, sans-serif;
+}
+
+.container {
+  margin-inline: auto;
+  max-width: 1200px;
+  padding-block: 1rem;
+}
+
+.building {
+  position: relative;
+  background-color: var(--rich-black);
+  counter-reset: floor 4;
+  display: flex;
+  border: var(--border-w) solid var(--alice-blue);
+  flex-direction: column;
+  margin-inline: auto;
+  max-width: min(80vw, 600px);
+}
+
+.floor {
+  display: flex;
+  border-top: var(--border-w) solid var(--alice-blue);
+}
+
+/* SHAFT STYLES */
+.shaft {
+  width: var(--grid-size);
+  height: var(--grid-size);
+  border-right: var(--border-w) solid var(--alice-blue);
+  position: relative;
+}
+
+.shaft::before {
+  color: var(--rich-black);
+  content: counter(floor);
+  counter-increment: floor -1;
+  font-size: 2em;
+  left: -3rem;
+  position: absolute;
+}
+
+.floor-buttons > button {
+  font-size: 1.5rem;
+  inline-size: 2rem;
+  margin-inline-end: 4px;
+}
+
+/* HALL STYLES */
+.hall {
+  align-items: center;
+  display: flex;
+  padding: 1rem;
+}
+
+.call-buttons {
+  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+button {
+  background-color: var(--rich-black);
+  border: 1px solid var(--alice-blue);
+  border-radius: 5px;
+  color: var(--alice-blue);
+  transition: scale 200ms ease-in-out;
+}
+
+button.clicked {
+  border-color: var(--pearl);
+  color: var(--pearl);
+}
+
+.call-buttons > button {
+  aspect-ratio: 1;
+  font-size: 2rem;
+  width: 2.5rem;
+}
+
+button:hover {
+  scale: 1.1;
+}
+
+.elevator {
+  --elevator-space: 5px;
+  aspect-ratio: 1;
+  bottom: calc(
+    var(--elevator-space) + var(--grid-size) * var(--current-floor) +
+      var(--border-w) * var(--current-floor)
+  );
+  left: var(--elevator-space);
+  border: var(--border-w) solid var(--alice-blue);
+  display: grid;
+  place-items: center;
+  position: absolute;
+  transition: bottom 3s var(--elevator-td) var(--elevator-ttf);
+  width: calc(var(--grid-size) - var(--elevator-space) * 2 - var(--border-w));
+}
