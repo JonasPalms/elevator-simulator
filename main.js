@@ -1,22 +1,25 @@
 // DOM setup
 const floorButtons = document.querySelector('.floor-buttons').children
 const floors = document.querySelectorAll('.floor')
-const callButtons = document.querySelectorAll('button.down, button.up')
-
+const shafts = document.getElementsByClassName('shaft')
+const callButtonsQuerySelector = 'button.down, button.up'
+const callButtons = document.querySelectorAll(callButtonsQuerySelector)
 const elevator = document.querySelector('#elevator')
 
 /**
  * Data setup
  */
-
 let currentFloor = 0
+let nextFloor
+let currentFloorNode = floors.item(floors.length - 1)
+const queue = new Array()
 
 function init() {
-  setElevatorPosition()
+  setElevatorPosition(currentFloor)
 }
 
-function setElevatorPosition() {
-  document.documentElement.style.setProperty('--current-floor', currentFloor)
+function setElevatorPosition(floor) {
+  document.documentElement.style.setProperty('--current-floor', floor)
 }
 
 /**
@@ -27,7 +30,24 @@ Array.from(floorButtons).forEach((floorButton) => {
 })
 
 function handleFloorClick(e) {
-  console.log(e.target.dataset.floor)
+  e.target.classList.add('clicked')
+  const targetFloor = e.target.dataset.floor
+
+  const newRequest = {
+    calledBy: currentFloor,
+    target: targetFloor,
+  }
+
+  if (currentFloor == targetFloor) {
+    setTimeout(() => e.target.classList.remove('clicked'), 1000)
+    return
+  }
+
+  const hasIdenticalRequest = queue.some(
+    (request) => request.target === newRequest.target
+  )
+
+  if (!hasIdenticalRequest) pushRequest(newRequest)
 }
 
 /* 
@@ -38,42 +58,69 @@ callButtons.forEach((callButton) =>
 )
 
 function handleCallElevatorClick(e) {
-  const floor = e.target.closest('.floor').dataset.floor
-
-  if (currentFloor === floor) return
+  const selectedFloor = e.target.closest('.floor').dataset.floor
 
   e.target.classList.add('clicked')
 
+  if (currentFloor == selectedFloor) {
+    setTimeout(() => e.target.classList.remove('clicked'), 1000)
+    return
+  }
+
   const newRequest = {
-    calledBy: floor,
-    target: floor,
+    calledBy: selectedFloor,
+    target: selectedFloor,
   }
 
   const hasIdenticalRequest = queue.some(
     (request) => request.target === newRequest.target
   )
 
-  if (!hasIdenticalRequest) moveElevator(newRequest)
+  if (!hasIdenticalRequest) pushRequest(newRequest)
 }
 
-function moveElevator(request) {
+function pushRequest(request) {
   queue.push(request)
-  document.documentElement.style.setProperty('--current-floor', request.target)
+  if (queue.length === 1) {
+    setElevatorPosition(request.target)
+  }
 }
 
 /* Queue setup */
-const queue = new Array()
-
 elevator.addEventListener('transitionend', (e) => {
-  const finishedRequest = queue.pop()
+  if (e.target !== elevator) return
 
-  let currentFloor
+  const finishedRequest = queue.shift()
 
-  floors.forEach((floor) => {
-    if (floor.dataset.floor == finishedRequest.target) {
-      currentFloor = floor
+  currentFloor = finishedRequest.target
+
+  currentFloorNode = Array(...floors).find((floor) => {
+    return floor.dataset.floor == currentFloor
+  })
+
+  currentFloorNode.querySelector('.shaft').classList.add('open')
+
+  // remove clicked classes
+  currentFloorNode
+    .querySelectorAll(callButtonsQuerySelector)
+    .forEach((button) => button.classList.remove('clicked'))
+
+  Array(...floorButtons).forEach((button) => {
+    if (button.dataset.floor == currentFloor) {
+      button.classList.remove('clicked')
     }
   })
+
+  // Handle next request if it exists
+  if (queue.length) {
+    console.log(queue[0].target)
+    setElevatorPosition(queue[0].target)
+  }
+})
+
+elevator.addEventListener('transitionrun', (e) => {
+  if (e.target !== elevator) return
+  currentFloorNode.querySelector('.shaft').classList.remove('open')
 })
 
 init()

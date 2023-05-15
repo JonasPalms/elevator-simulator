@@ -13,7 +13,8 @@
   --border-w: 2px;
   --current-floor: 0;
   --elevator-ttf: cubic-bezier(0.5, -0.03, 0.5, 1.02);
-  --elevator-td: 0s;
+  --elevator-tdelay: 2s;
+  --elevator-tduration: 2s;
 }
 
 body {
@@ -61,6 +62,24 @@ body {
   position: absolute;
 }
 
+.shaft::after {
+  content: '';
+  position: absolute;
+  height: 85%;
+  transform: scaleY(0);
+  background-color: var(--rich-black);
+  width: 1rem;
+  z-index: 1;
+  top: 15%;
+  right: -0.5rem;
+  transition: transform 1s ease;
+  transform-origin: center;
+}
+
+.shaft.open::after {
+  transform: scaleY(1);
+}
+
 .floor-buttons > button {
   font-size: 1.5rem;
   inline-size: 2rem;
@@ -87,7 +106,7 @@ button {
   border: 1px solid var(--alice-blue);
   border-radius: 5px;
   color: var(--alice-blue);
-  transition: scale 200ms ease-in-out;
+  transition: all 200ms ease-in-out;
 }
 
 button.clicked {
@@ -117,6 +136,7 @@ button:hover {
   display: grid;
   place-items: center;
   position: absolute;
-  transition: bottom 3s var(--elevator-td) var(--elevator-ttf);
+  transition: bottom var(--elevator-tduration) var(--elevator-tdelay)
+    var(--elevator-ttf);
   width: calc(var(--grid-size) - var(--elevator-space) * 2 - var(--border-w));
 }
